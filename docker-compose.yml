@@ -1,22 +1,29 @@
-version: '3.8'
+version: "3.8"
 
-services: 
-    php:
-        image: php:8.0-apache
-        ports:
-            - 80:80
-        volumes: 
-            - ./src:/var/www/html/
-    
-    db:
-        image: mysql
-        command: --default-authentication-plugin=mysql_native_password
-        restart: always
-        environment: 
-            MYSQL_ROOT_PASSWORD: example
-        
-    adminer: # alternative to phpmyadmin
-        image: adminer
-        restart: always
-        ports: 
-            - 8080:8080
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 81:80
+    volumes:
+      - ./src:/var/www/html/
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  adminer: # alternative to phpmyadmin
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql-data:
